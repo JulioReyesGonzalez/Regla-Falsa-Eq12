@@ -1,26 +1,27 @@
+# Makefile para compilar y ejecutar el juego Tetris con SDL2
+
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wa,-mbig-obj
-INC_DIR = -I include
+CXXFLAGS = -std=c++11 -Wall
+LDFLAGS = -L"C:\msys64\mingw64\lib" -lmingw32 -lSDL2main -lSDL2
+
 SRC_DIR = src
-OBJ_DIR = bin
-TARGET = bin/ReglaFalsa
+BIN_DIR = bin
 
-# Lista de archivos fuente
 SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
+OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(BIN_DIR)/%.o, $(SOURCES))
+EXECUTABLE = $(BIN_DIR)/tutorial1
 
-# Lista de archivos objeto generados a partir de los archivos fuente
-OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
+all: $(EXECUTABLE)
 
-all: $(TARGET)
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -I"C:\msys64\mingw64\include\SDL2" -o $@ $^ $(LDFLAGS) -mconsole
 
-$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(INC_DIR) $^ -o $@
+$(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -I"C:\msys64\mingw64\include\SDL2" -c -o $@ $<
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) $(INC_DIR) -c $< -o $@
-
-run: $(TARGET)
-	./$(TARGET)
+run: $(EXECUTABLE)
+	./$(EXECUTABLE)
 
 clean:
-	rm -f $(OBJ_DIR)/*.o $(TARGET)
+	rm -f $(OBJECTS) $(EXECUTABLE)
+
