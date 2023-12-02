@@ -1,6 +1,6 @@
 # Método de la Regla Falsa
 
-Este proyecto implementa el Método de la Regla Falsa para encontrar las raíces de una función matemática. El método se utiliza para aproximar soluciones de ecuaciones no lineales.
+Este proyecto implementa el Método de la Regla Falsa para encontrar las raíces de una función matemática. El método se utiliza para aproximar soluciones de ecuaciones no lineales. en c++
 
 ## Requisitos
 
