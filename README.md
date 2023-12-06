@@ -1,6 +1,9 @@
-# Método de la Regla Falsa
+# Proyecto TETRIS
+![Alt text](/docs/tetris.png)
+# Diagrama
+![Alt text](/docs/diagrama.png)
 
-Este proyecto implementa el Método de la Regla Falsa para encontrar las raíces de una función matemática. El método se utiliza para aproximar soluciones de ecuaciones no lineales. en c++
+Este proyecto implementa el Método de la Regla Falsa para encontrar las raíces de una función matemática. El método se utiliza para aproximar soluciones de ecuaciones no lineales.
 
 ## Requisitos
 
@@ -26,5 +29,5 @@ Puedes ajustar la función que se evalúa y otros parámetros en el archivo main
 ## Estructura del Proyecto
 
 - src: Contiene los archivos fuente.
-- include: Contiene las librerías necesarias, como exprtk.
+- include: Contiene las clases.
 - bin: Aquí se almacenan los archivos objeto y el ejecutable.
