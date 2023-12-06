@@ -246,3 +246,4 @@ int main(int argc, char* argv[]) {
     closeSDL();
     return 0;
 }
+
