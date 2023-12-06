@@ -6,6 +6,7 @@
 #define SCREEN_WIDTH 400
 #define SCREEN_HEIGHT 600
 #define BLOCK_SIZE 30
+#define BORDER_SIZE 2
 
 SDL_Window* window;
 SDL_Renderer* renderer;
@@ -18,10 +19,9 @@ std::vector<std::vector<int>> board(BOARD_HEIGHT, std::vector<int>(BOARD_WIDTH, 
 struct Tetromino {
     int x, y;
     std::vector<std::vector<int>> shape;
-    SDL_Color color;  // Agregado para almacenar el color de la pieza
+    SDL_Color color;
 
     void rotate() {
-        // Algoritmo simple de rotación: transponer y revertir las columnas
         std::vector<std::vector<int>> newShape(shape[0].size(), std::vector<int>(shape.size(), 0));
         for (size_t i = 0; i < shape.size(); ++i) {
             for (size_t j = 0; j < shape[i].size(); ++j) {
@@ -71,6 +71,15 @@ void drawBlock(int x, int y, const SDL_Color& color) {
 }
 
 void drawBoard() {
+    // Dibuja el fondo negro
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    // Dibuja el límite del tablero como una delgada línea blanca
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_Rect boardRect = {0, 0, BOARD_WIDTH * BLOCK_SIZE + BORDER_SIZE, BOARD_HEIGHT * BLOCK_SIZE + BORDER_SIZE};
+    SDL_RenderDrawRect(renderer, &boardRect);
+
     for (int i = 0; i < BOARD_HEIGHT; ++i) {
         for (int j = 0; j < BOARD_WIDTH; ++j) {
             if (board[i][j] != 0) {
@@ -98,11 +107,11 @@ bool isValidMove(const Tetromino& piece, int offsetX, int offsetY) {
                 int newY = piece.y + i + offsetY;
 
                 if (newX < 0 || newX >= BOARD_WIDTH || newY >= BOARD_HEIGHT) {
-                    return false;  // Fuera de los límites del tablero
+                    return false;
                 }
 
                 if (newY >= 0 && board[newY][newX] != 0) {
-                    return false;  // Colisión con otra pieza en el tablero
+                    return false;
                 }
             }
         }
@@ -116,22 +125,21 @@ void mergePieceIntoBoard(const Tetromino& piece) {
             if (piece.shape[i][j] != 0) {
                 int boardX = piece.x + j;
                 int boardY = piece.y + i;
-                board[boardY][boardX] = 1;  // Marca la posición como ocupada
+                board[boardY][boardX] = 1;
             }
         }
     }
 }
 
 void spawnPiece() {
-    // Define aquí las distintas formas de las piezas (I, J, L, O, S, T, Z)
     const std::vector<std::vector<int>> shapes[7] = {
-        {{1, 1, 1, 1}},           // I
-        {{1, 1, 1, 0}, {1, 0, 0, 0}},  // J
-        {{1, 1, 1, 0}, {0, 0, 1, 0}},  // L
-        {{1, 1}, {1, 1}},              // O
-        {{0, 1, 1, 1}, {1, 1, 0, 0}},  // S
-        {{1, 1, 1, 0}, {0, 1, 0, 0}},  // T
-        {{1, 1, 0, 0}, {0, 1, 1, 0}}   // Z
+        {{1, 1, 1, 1}},           
+        {{1, 1, 1, 0}, {1, 0, 0, 0}},  
+        {{1, 1, 1, 0}, {0, 0, 1, 0}},  
+        {{1, 1}, {1, 1}},              
+        {{0, 1, 1, 1}, {1, 1, 0, 0}},  
+        {{1, 1, 1, 0}, {0, 1, 0, 0}},  
+        {{1, 1, 0, 0}, {0, 1, 1, 0}}   
     };
 
     currentPiece.shape = shapes[rand() % 7];
@@ -153,13 +161,11 @@ void clearLines() {
         }
 
         if (lineComplete) {
-            // Elimina la línea y desplaza las demás hacia abajo
             for (int k = i; k > 0; --k) {
                 for (int j = 0; j < BOARD_WIDTH; ++j) {
                     board[k][j] = board[k - 1][j];
                 }
             }
-            // Agrega una nueva línea vacía en la parte superior
             for (int j = 0; j < BOARD_WIDTH; ++j) {
                 board[0][j] = 0;
             }
@@ -169,11 +175,8 @@ void clearLines() {
 
 void update() {
     if (isValidMove(currentPiece, 0, 1)) {
-        // Si el movimiento hacia abajo es válido, simplemente mueve la pieza
         currentPiece.y += 1;
     } else {
-        // Si no es válido, la pieza ha llegado al fondo o ha chocado con otra pieza
-        // Merge la pieza actual en el tablero y genera una nueva pieza
         mergePieceIntoBoard(currentPiece);
         clearLines();
         spawnPiece();
@@ -181,12 +184,8 @@ void update() {
 }
 
 void render() {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
-
     drawBoard();
     drawCurrentPiece();
-
     SDL_RenderPresent(renderer);
 }
 
@@ -216,7 +215,6 @@ void handleInput() {
                         }
                         break;
                     case SDLK_UP:
-                        // Rotar la pieza en sentido horario
                         Tetromino rotatedPiece = currentPiece;
                         rotatedPiece.rotate();
                         if (isValidMove(rotatedPiece, 0, 0)) {
@@ -240,10 +238,9 @@ int main(int argc, char* argv[]) {
         handleInput();
         update();
         render();
-        SDL_Delay(500);  // Ajusta el retraso según la velocidad deseada
+        SDL_Delay(500);
     }
 
     closeSDL();
     return 0;
 }
-
