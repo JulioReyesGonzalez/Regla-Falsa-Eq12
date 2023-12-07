@@ -1,5 +1,5 @@
-#include "InputHandler.h"
-#include "Piece.h"
+#include "../include/InputHandler.h"
+#include "../include/Piece.h"
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <vector>

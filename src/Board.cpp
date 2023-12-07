@@ -1,5 +1,5 @@
-#include "Board.h"
-#include "Piece.h"
+#include "../include/Board.h"
+#include "../include/Piece.h"
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <vector>

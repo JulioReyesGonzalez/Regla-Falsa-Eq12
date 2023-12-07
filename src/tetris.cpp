@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 
-#define SCREEN_WIDTH 400
+#define SCREEN_WIDTH 303
 #define SCREEN_HEIGHT 600
 #define BLOCK_SIZE 30
 #define BORDER_SIZE 2
